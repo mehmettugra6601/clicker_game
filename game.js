@@ -3,17 +3,18 @@ let score = 0;
 let clickPower = 1;
 let autoClicker = 0;
 let unlockedPlanets = 1;
+let gameStarted = false;
 const planets = [];
 const planetData = [
-    { name: "MERKÜR", size: 0.4, color: 0x8B8B8B, price: 10, distance: 3 },
-    { name: "VENÜS", size: 0.6, color: 0xE6C229, price: 25, distance: 4 },
-    { name: "DÜNYA", size: 0.6, color: 0x1E90FF, price: 50, distance: 5 },
-    { name: "MARS", size: 0.5, color: 0xC1440E, price: 100, distance: 6 },
-    { name: "JÜPİTER", size: 1.0, color: 0xD39C61, price: 200, distance: 7 },
-    { name: "SATÜRN", size: 0.9, color: 0xE4D191, price: 400, distance: 8, hasRings: true },
-    { name: "URANÜS", size: 0.7, color: 0xC1E3E3, price: 800, distance: 9 },
-    { name: "NEPTÜN", size: 0.7, color: 0x5B5DDF, price: 1600, distance: 10 },
-    { name: "PLÜTON", size: 0.3, color: 0xE6E6FA, price: 3200, distance: 11 }
+    { name: "MERKÜR", size: 0.4, color: 0x8B8B8B, price: 10, x: -3, z: 0 },
+    { name: "VENÜS", size: 0.6, color: 0xE6C229, price: 25, x: 3, z: 0 },
+    { name: "DÜNYA", size: 0.6, color: 0x1E90FF, price: 50, x: 0, z: -3 },
+    { name: "MARS", size: 0.5, color: 0xC1440E, price: 100, x: 0, z: 3 },
+    { name: "JÜPİTER", size: 1.0, color: 0xD39C61, price: 200, x: -5, z: -5 },
+    { name: "SATÜRN", size: 0.9, color: 0xE4D191, price: 400, x: 5, z: -5, hasRings: true },
+    { name: "URANÜS", size: 0.7, color: 0xC1E3E3, price: 800, x: -5, z: 5 },
+    { name: "NEPTÜN", size: 0.7, color: 0x5B5DDF, price: 1600, x: 5, z: 5 },
+    { name: "PLÜTON", size: 0.3, color: 0xE6E6FA, price: 3200, x: 0, z: 7 }
 ];
 
 // DOM elementleri
@@ -33,9 +34,10 @@ const welcomeScreen = document.getElementById('welcome-screen');
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000033);
 
-// Kamera ve renderer ayarları
+// Kamera ayarları (mobil için farklı)
+const isMobile = window.innerWidth < 768;
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 15;
+camera.position.z = isMobile ? 10 : 15;
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -63,15 +65,13 @@ function createPlanet(planetInfo) {
     
     const planet = new THREE.Mesh(geometry, material);
     planet.castShadow = true;
-    planet.position.x = planetInfo.distance * Math.sin(Date.now() * 0.0005);
-    planet.position.z = planetInfo.distance * Math.cos(Date.now() * 0.0005);
+    planet.position.set(planetInfo.x, 0, planetInfo.z);
     planet.userData = { 
         name: planetInfo.name,
         value: planetInfo.price / 5,
         originalSize: planetInfo.size
     };
     
-    // Halka ekleme (Satürn için)
     if (planetInfo.hasRings) {
         const ringGeometry = new THREE.RingGeometry(planetInfo.size * 1.5, planetInfo.size * 2, 32);
         const ringMaterial = new THREE.MeshPhongMaterial({
@@ -105,14 +105,9 @@ function updateScore() {
     clickPowerElement.textContent = clickPower;
     autoClickElement.textContent = autoClicker;
     
-    // Gezegen boyutlarını puanla güncelle
     planets.forEach(planet => {
         const growthFactor = 1 + (score / 10000);
-        planet.scale.set(
-            planet.userData.originalSize * growthFactor,
-            planet.userData.originalSize * growthFactor,
-            planet.userData.originalSize * growthFactor
-        );
+        planet.scale.setScalar(planet.userData.originalSize * growthFactor);
     });
 }
 
@@ -183,14 +178,14 @@ function startAutoClickers() {
     }, 1000);
 }
 
-// Fare tıklama olayı
+// Tıklama olayları (hem mouse hem touch için)
 function initClickEvents() {
-    renderer.domElement.addEventListener('click', (event) => {
+    const handleInteraction = (clientX, clientY) => {
         if (!gameStarted) return;
         
         const mouse = new THREE.Vector2(
-            (event.clientX / window.innerWidth) * 2 - 1,
-            -(event.clientY / window.innerHeight) * 2 + 1
+            (clientX / window.innerWidth) * 2 - 1,
+            -(clientY / window.innerHeight) * 2 + 1
         );
         
         const raycaster = new THREE.Raycaster();
@@ -206,12 +201,19 @@ function initClickEvents() {
             animateClick(planet);
             updateScore();
         }
+    };
+
+    // Mouse ve touch eventleri
+    renderer.domElement.addEventListener('click', (e) => handleInteraction(e.clientX, e.clientY));
+    renderer.domElement.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        handleInteraction(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
     });
 }
 
 // Hoşgeldin ekranı
 function initWelcomeScreen() {
-    welcomeScreen.addEventListener('click', () => {
+    const startGame = () => {
         gsap.to(welcomeScreen, {
             opacity: 0,
             duration: 0.5,
@@ -222,7 +224,10 @@ function initWelcomeScreen() {
                 showMessage('Oyun başladı! Gezegenlere tıkla!', '#00FF00');
             }
         });
-    });
+    };
+
+    welcomeScreen.addEventListener('click', startGame);
+    welcomeScreen.addEventListener('touchend', startGame);
 }
 
 // Mağaza aç/kapa
@@ -237,26 +242,25 @@ function toggleShop() {
 // Animasyon döngüsü
 function animate() {
     requestAnimationFrame(animate);
-    
-    // Gezegenleri yörüngede döndür
-    planets.forEach((planet, index) => {
-        const speed = 0.0005 * (index + 1);
-        planet.position.x = planetData[index].distance * Math.sin(Date.now() * speed);
-        planet.position.z = planetData[index].distance * Math.cos(Date.now() * speed);
-        planet.rotation.y += 0.01;
-    });
-    
     renderer.render(scene, camera);
 }
 
 // Pencere boyutu değişikliği
-window.addEventListener('resize', () => {
+function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-});
+    
+    // Mobil için kamera pozisyonunu ayarla
+    if (window.innerWidth < 768) {
+        camera.position.z = 10;
+    } else {
+        camera.position.z = 15;
+    }
+}
 
 // Oyun başlatma
+window.addEventListener('resize', onWindowResize);
 initWelcomeScreen();
 initPlanets();
 initClickEvents();
@@ -266,3 +270,13 @@ startAutoClickers();
 // Mağaza butonları
 openShopBtn.addEventListener('click', toggleShop);
 closeShopBtn.addEventListener('click', toggleShop);
+
+// Mobil için touch eventleri
+openShopBtn.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    toggleShop();
+});
+closeShopBtn.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    toggleShop();
+});
