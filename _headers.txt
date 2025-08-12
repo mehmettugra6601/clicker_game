@@ -1,4 +1,0 @@
-/*
-  X-Frame-Options: ALLOW-FROM https://example.com
-  Access-Control-Allow-Origin: *
-  Cache-Control: public, max-age=14400
