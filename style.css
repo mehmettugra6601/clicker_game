@@ -1,4 +1,28 @@
-/* Giriş ekranı stilleri */
+:root {
+    --primary-color: #6e48aa;
+    --secondary-color: #9d50bb;
+    --accent-color: #4776E6;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: 'Arial', sans-serif;
+    background: #000;
+    color: white;
+}
+
+.hidden {
+    display: none !important;
+}
+
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
 #welcome-screen {
     position: absolute;
     width: 100%;
@@ -37,3 +61,6 @@
     50% { transform: translateY(-10px); }
     100% { transform: translateY(0); }
 }
+
+/* Diğer stiller aynen kalıyor... */
+[geri kalan CSS kodları aynen devam edecek]
