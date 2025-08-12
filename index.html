@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ultra 3D Clicker Oyunu</title>
+    <link rel="icon" href="assets/favicon.ico">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+</head>
+<body>
+    <div id="game-container">
+        <div id="header">
+            <h1>✨ GALAKTİK TOP TOPLAYICI ✨</h1>
+            <div id="score-container">
+                <div id="score">0</div>
+                <div id="stats">
+                    <span>Tıklama Gücü: <span id="click-power">1</span></span>
+                    <span>Otomatik Tık: <span id="auto-click">0</span>/sn</span>
+                </div>
+            </div>
+        </div>
+        
+        <div id="shop" class="hidden">
+            <h2>⚡ UZAY MAĞAZASI ⚡</h2>
+            <div class="shop-item" onclick="buyUpgrade('click', 10)">
+                <h3>Lazer Tıklayıcı</h3>
+                <p>+1 Tıklama Gücü</p>
+                <div class="price">💰 10</div>
+            </div>
+            <div class="shop-item" onclick="buyUpgrade('auto', 25)">
+                <h3>Robot Kol</h3>
+                <p>+1 Otomatik Tık/sn</p>
+                <div class="price">💰 25</div>
+            </div>
+            <div class="shop-item" onclick="buyUpgrade('mini', 50)">
+                <h3>Mini Toplar</h3>
+                <p>Yardımcı toplar kazan</p>
+                <div class="price">💰 50</div>
+            </div>
+            <button id="close-shop" class="glow-button">Uzaya Dön</button>
+        </div>
+        
+        <button id="open-shop" class="glow-button">🚀 Mağaza</button>
+        <div id="click-area"></div>
+        
+        <div id="message-popup" class="hidden">
+            <div id="message-text"></div>
+        </div>
+    </div>
+    
+    <audio id="click-sound" src="assets/click.mp3" preload="auto"></audio>
+    <audio id="buy-sound" src="assets/buy.mp3" preload="auto"></audio>
+    
+    <script src="game.js"></script>
+</body>
+</html>
