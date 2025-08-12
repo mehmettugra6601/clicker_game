@@ -1,3 +1,3 @@
 git add .
-git commit -m "gücelenen alan"
+git commit -m "html yenileme"
 git push origin main

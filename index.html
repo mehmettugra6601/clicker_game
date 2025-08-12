@@ -15,113 +15,121 @@
         }
         
         body {
-            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            background: linear-gradient(135deg, #0a0a2a, #000033, #0a0a2a);
             color: #e6e6e6;
             min-height: 100vh;
             overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
         
         .game-container {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            max-width: 1200px;
-            height: 90vh;
+            height: 100%;
             display: grid;
-            grid-template-columns: 1fr 300px;
-            grid-template-rows: 80px 1fr;
-            grid-gap: 20px;
-            padding: 20px;
+            grid-template-columns: 1fr;
+            grid-template-rows: auto 1fr auto;
+            grid-gap: 10px;
+            padding: 10px;
         }
         
         header {
-            grid-column: 1 / -1;
+            grid-row: 1;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.7);
             border-radius: 15px;
-            padding: 15px 25px;
+            padding: 12px 20px;
             border: 1px solid #4fc3dc;
-            box-shadow: 0 0 20px rgba(79, 195, 220, 0.3);
+            box-shadow: 0 0 15px rgba(79, 195, 220, 0.3);
+            z-index: 10;
         }
         
         .stats {
             display: flex;
-            gap: 25px;
+            gap: 15px;
+            flex-wrap: wrap;
         }
         
         .stat-box {
-            background: rgba(0, 30, 60, 0.7);
-            padding: 10px 20px;
+            background: rgba(0, 30, 60, 0.8);
+            padding: 8px 15px;
             border-radius: 10px;
             border: 1px solid #00a8ff;
-            min-width: 120px;
+            min-width: 100px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #a0d2ff;
         }
         
         .stat-value {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
             color: #00a8ff;
-            margin-top: 5px;
+            margin-top: 3px;
         }
         
         #click-area {
             grid-row: 2;
-            grid-column: 1;
-            background: rgba(0, 10, 30, 0.7);
+            background: rgba(0, 5, 15, 0.7);
             border-radius: 15px;
             overflow: hidden;
             border: 1px solid #9d4edd;
-            box-shadow: 0 0 20px rgba(157, 78, 221, 0.3);
+            box-shadow: 0 0 15px rgba(157, 78, 221, 0.3);
             position: relative;
+            width: 100%;
+            height: 100%;
         }
         
         .controls {
-            grid-row: 2;
-            grid-column: 2;
+            grid-row: 3;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 10px;
+            z-index: 10;
         }
         
         .shop {
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.8);
             border-radius: 15px;
-            padding: 20px;
+            padding: 15px;
             border: 1px solid #f9c74f;
-            box-shadow: 0 0 20px rgba(249, 199, 79, 0.3);
-            flex: 1;
+            box-shadow: 0 0 15px rgba(249, 199, 79, 0.3);
             display: flex;
             flex-direction: column;
+            max-height: 300px;
+            overflow-y: auto;
         }
         
         .shop-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
             border-bottom: 2px solid #f9c74f;
         }
         
         .shop-title {
-            font-size: 24px;
+            font-size: 20px;
             color: #f9c74f;
         }
         
         .upgrade {
-            background: rgba(0, 30, 60, 0.7);
+            background: rgba(0, 30, 60, 0.8);
             border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
+            padding: 12px;
+            margin-bottom: 12px;
             border: 1px solid #4361ee;
             transition: transform 0.3s;
         }
         
         .upgrade:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
             border-color: #00a8ff;
         }
         
@@ -129,11 +137,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         
         .upgrade-name {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             color: #4cc9f0;
         }
@@ -141,24 +149,26 @@
         .upgrade-price {
             font-weight: bold;
             color: #f9c74f;
+            font-size: 16px;
         }
         
         .upgrade-desc {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             color: #b0b0b0;
-            font-size: 14px;
+            font-size: 13px;
         }
         
         .btn {
             background: linear-gradient(45deg, #4361ee, #3a0ca3);
             color: white;
             border: none;
-            padding: 10px 15px;
+            padding: 8px 12px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s;
             width: 100%;
+            font-size: 14px;
         }
         
         .btn:hover {
@@ -174,8 +184,9 @@
             background: linear-gradient(45deg, #f9c74f, #f8961e);
             color: #2d00f7;
             font-weight: bold;
-            font-size: 18px;
-            padding: 15px;
+            font-size: 16px;
+            padding: 12px;
+            border-radius: 12px;
         }
         
         #message-popup {
@@ -183,14 +194,19 @@
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            padding: 15px 30px;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 12px 25px;
             border-radius: 50px;
-            border: 2px solid;
+            border: 2px solid #00ff00;
             z-index: 100;
             transition: all 0.5s;
             opacity: 0;
             pointer-events: none;
+            text-align: center;
+            max-width: 90%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         
         #message-popup.show {
@@ -204,7 +220,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle, #0f3460, #16213e, #1a1a2e);
+            background: radial-gradient(circle, #0a0a2a, #000033, #0a0a2a);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -215,27 +231,27 @@
         }
         
         .welcome-content {
-            max-width: 800px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 40px;
+            max-width: 90%;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
             border-radius: 20px;
             border: 3px solid #00a8ff;
-            box-shadow: 0 0 50px rgba(0, 168, 255, 0.5);
+            box-shadow: 0 0 30px rgba(0, 168, 255, 0.5);
         }
         
         .game-title {
-            font-size: 48px;
-            margin-bottom: 20px;
+            font-size: 32px;
+            margin-bottom: 15px;
             background: linear-gradient(45deg, #4cc9f0, #4361ee, #9d4edd);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(77, 201, 240, 0.5);
+            text-shadow: 0 0 10px rgba(77, 201, 240, 0.5);
         }
         
         .instructions {
-            font-size: 20px;
-            line-height: 1.6;
-            margin-bottom: 30px;
+            font-size: 18px;
+            line-height: 1.5;
+            margin-bottom: 25px;
             color: #e0e0e0;
         }
         
@@ -243,20 +259,20 @@
             background: linear-gradient(45deg, #f72585, #b5179e);
             color: white;
             border: none;
-            padding: 15px 50px;
-            font-size: 24px;
+            padding: 12px 40px;
+            font-size: 20px;
             border-radius: 50px;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s;
-            margin-top: 20px;
+            margin-top: 15px;
             border: 2px solid #ff7096;
-            box-shadow: 0 0 30px rgba(247, 37, 133, 0.5);
+            box-shadow: 0 0 20px rgba(247, 37, 133, 0.5);
         }
         
         .start-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 40px rgba(247, 37, 133, 0.7);
+            box-shadow: 0 0 30px rgba(247, 37, 133, 0.7);
         }
         
         .key-hint {
@@ -264,38 +280,83 @@
             background: rgba(255, 255, 255, 0.2);
             border: 1px solid #4cc9f0;
             border-radius: 5px;
-            padding: 2px 10px;
-            margin: 0 5px;
+            padding: 2px 8px;
+            margin: 0 3px;
             font-family: monospace;
         }
         
         .credit {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 10px;
+            right: 10px;
             background: rgba(0, 0, 0, 0.5);
-            padding: 10px 20px;
+            padding: 8px 15px;
             border-radius: 50px;
-            font-size: 14px;
+            font-size: 12px;
             color: #9d4edd;
             border: 1px solid #9d4edd;
+            z-index: 10;
         }
         
-        @media (max-width: 900px) {
-            .game-container {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto auto 1fr;
+        .mobile-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .mobile-btn {
+            flex: 1;
+            background: linear-gradient(45deg, #4361ee, #3a0ca3);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
             }
             
-            #click-area {
-                grid-row: 2;
-                grid-column: 1;
-                height: 50vh;
+            .stats {
+                width: 100%;
+                justify-content: center;
             }
             
-            .controls {
-                grid-row: 3;
-                grid-column: 1;
+            .stat-box {
+                min-width: 80px;
+                padding: 6px 10px;
+            }
+            
+            .stat-label {
+                font-size: 12px;
+            }
+            
+            .stat-value {
+                font-size: 16px;
+            }
+            
+            .game-title {
+                font-size: 28px;
+            }
+            
+            .instructions {
+                font-size: 16px;
+            }
+            
+            .start-btn {
+                padding: 10px 30px;
+                font-size: 18px;
+            }
+        }
+        
+        @media (max-height: 600px) {
+            .shop {
+                max-height: 200px;
             }
         }
     </style>
@@ -303,18 +364,18 @@
 <body>
     <div class="game-container">
         <header>
-            <h1>🌟 Uzayda Gezegen Toplama Oyunu</h1>
+            <h1>🌟 Uzayda Gezegen Toplama</h1>
             <div class="stats">
                 <div class="stat-box">
-                    <div>Puan</div>
+                    <div class="stat-label">Puan</div>
                     <div id="score" class="stat-value">0</div>
                 </div>
                 <div class="stat-box">
-                    <div>Tıklama Gücü</div>
+                    <div class="stat-label">Tıklama Gücü</div>
                     <div id="click-power" class="stat-value">1</div>
                 </div>
                 <div class="stat-box">
-                    <div>Otomatik Toplayıcı</div>
+                    <div class="stat-label">Otomatik Toplayıcı</div>
                     <div id="auto-click" class="stat-value">0</div>
                 </div>
             </div>
@@ -357,6 +418,11 @@
                     <div class="upgrade-desc">Daha değerli yeni bir gezegen aç</div>
                     <button class="btn" onclick="buyUpgrade('planet', 50)">Satın Al</button>
                 </div>
+            </div>
+            
+            <div class="mobile-controls">
+                <div class="mobile-btn" id="mobile-click">Tıkla</div>
+                <div class="mobile-btn" id="mobile-shop">Mağaza</div>
             </div>
         </div>
     </div>
@@ -422,6 +488,8 @@
         const clickSound = document.getElementById('click-sound');
         const buySound = document.getElementById('buy-sound');
         const welcomeScreen = document.getElementById('welcome-screen');
+        const mobileClickBtn = document.getElementById('mobile-click');
+        const mobileShopBtn = document.getElementById('mobile-shop');
 
         // Three.js sahnesi
         const scene = new THREE.Scene();
@@ -431,7 +499,7 @@
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.z = 15;
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMap.enabled = true;
         document.getElementById('click-area').appendChild(renderer.domElement);
@@ -450,12 +518,12 @@
             const starsGeometry = new THREE.BufferGeometry();
             const starsMaterial = new THREE.PointsMaterial({
                 color: 0xFFFFFF,
-                size: 0.2,
+                size: 0.15,
                 transparent: true
             });
 
             const starsVertices = [];
-            for (let i = 0; i < 10000; i++) {
+            for (let i = 0; i < 5000; i++) {
                 const x = THREE.MathUtils.randFloatSpread(2000);
                 const y = THREE.MathUtils.randFloatSpread(2000);
                 const z = THREE.MathUtils.randFloatSpread(2000);
@@ -482,7 +550,7 @@
             planet.position.set(0, 0, 0);
             planet.userData = { 
                 name: planetInfo.name,
-                value: planetInfo.price / 10,
+                value: Math.max(1, Math.floor(planetInfo.price / 10)),
                 originalSize: planetInfo.size,
                 currentSize: planetInfo.size
             };
@@ -576,18 +644,19 @@
             
             score -= cost;
             buySound.currentTime = 0;
+            buySound.volume = 0.3;
             buySound.play();
             
             switch(type) {
                 case 'click':
                     clickPower++;
                     showMessage('Tıklama gücü arttı!', '#00FF00');
-                    animatePurchase(planets[0]);
+                    if (planets.length > 0) animatePurchase(planets[0]);
                     break;
                 case 'auto':
                     autoClicker++;
                     showMessage('Otomatik toplayıcı eklendi!', '#00FF00');
-                    animatePurchase(planets[0]);
+                    if (planets.length > 0) animatePurchase(planets[0]);
                     break;
                 case 'planet':
                     if (unlockedPlanets < planetData.length) {
@@ -600,7 +669,7 @@
                         // Yeni gezegeni ekle
                         createPlanet(planetData[unlockedPlanets - 1]);
                         showMessage(`Yeni gezegen: ${planetData[unlockedPlanets - 1].name}`, '#00FF00');
-                        animatePurchase(planets[0]);
+                        if (planets.length > 0) animatePurchase(planets[0]);
                     } else {
                         showMessage('Tüm gezegenler açıldı!', '#FFFF00');
                     }
@@ -634,10 +703,13 @@
             const handleInteraction = (clientX, clientY) => {
                 if (!gameStarted) return;
                 
-                const mouse = new THREE.Vector2(
-                    (clientX / window.innerWidth) * 2 - 1,
-                    -(clientY / window.innerHeight) * 2 + 1
-                );
+                // Renderer alanını al
+                const rect = renderer.domElement.getBoundingClientRect();
+                
+                // Fare pozisyonunu normalize et
+                const mouse = new THREE.Vector2();
+                mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+                mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
                 
                 const raycaster = new THREE.Raycaster();
                 raycaster.setFromCamera(mouse, camera);
@@ -648,6 +720,7 @@
                     const planet = intersects[0].object;
                     score += clickPower * planet.userData.value;
                     clickSound.currentTime = 0;
+                    clickSound.volume = 0.2;
                     clickSound.play();
                     animateClick(planet);
                     updateScore();
@@ -658,6 +731,17 @@
             renderer.domElement.addEventListener('touchend', (e) => {
                 e.preventDefault();
                 handleInteraction(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+            });
+            
+            // Mobil tıklama butonu
+            mobileClickBtn.addEventListener('click', () => {
+                if (!gameStarted) return;
+                
+                // Merkeze tıklama simüle et
+                const rect = renderer.domElement.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                handleInteraction(centerX, centerY);
             });
         }
 
@@ -721,6 +805,7 @@
         // Mağaza butonları
         openShopBtn.addEventListener('click', toggleShop);
         closeShopBtn.addEventListener('click', toggleShop);
+        mobileShopBtn.addEventListener('click', toggleShop);
 
         // Mobil için touch eventleri
         openShopBtn.addEventListener('touchend', (e) => {
