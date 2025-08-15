@@ -315,6 +315,25 @@
             text-align: center;
         }
         
+        .save-indicator {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-size: 12px;
+            color: #4cc9f0;
+            border: 1px solid #4cc9f0;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        
+        .save-indicator.show {
+            opacity: 1;
+        }
+        
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
@@ -441,12 +460,14 @@
                 <p>🔹 Otomatik toplayıcılar ile pasif gelir elde et</p>
                 <p>🔹 Yeni gezegenler açarak oyunu ilerlet</p>
                 <p>🔹 Mağazayı açmak için <span class="key-hint">M</span> tuşuna bas</p>
+                <p style="color:#4cc9f0; margin-top:15px;">✅ Oyun durumunuz otomatik kaydediliyor</p>
             </div>
             <button class="start-btn">OYUNA BAŞLA</button>
         </div>
     </div>
     
     <div class="credit">Oyunu yapan: MTÇ kodlayan gardaşım</div>
+    <div class="save-indicator" id="save-indicator">Oyun kaydedildi!</div>
     
     <audio id="click-sound" preload="auto">
         <source src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3" type="audio/mpeg">
@@ -490,6 +511,7 @@
         const welcomeScreen = document.getElementById('welcome-screen');
         const mobileClickBtn = document.getElementById('mobile-click');
         const mobileShopBtn = document.getElementById('mobile-shop');
+        const saveIndicator = document.getElementById('save-indicator');
 
         // Three.js sahnesi
         const scene = new THREE.Scene();
@@ -580,6 +602,53 @@
                     createPlanet(planetData[i]);
                 }
             }
+        }
+
+        // Oyun durumunu kaydet
+        function saveGameState() {
+            const gameState = {
+                score,
+                clickPower,
+                autoClicker,
+                unlockedPlanets
+            };
+            
+            localStorage.setItem('planetClickerGame', JSON.stringify(gameState));
+            
+            // Kayıt onayını göster
+            saveIndicator.classList.add('show');
+            setTimeout(() => {
+                saveIndicator.classList.remove('show');
+            }, 2000);
+        }
+
+        // Oyun durumunu yükle
+        function loadGameState() {
+            const savedState = localStorage.getItem('planetClickerGame');
+            if (savedState) {
+                const state = JSON.parse(savedState);
+                score = state.score || 0;
+                clickPower = state.clickPower || 1;
+                autoClicker = state.autoClicker || 0;
+                unlockedPlanets = state.unlockedPlanets || 1;
+                
+                // UI'ı güncelle
+                updateScore();
+                
+                // Gezegenleri yeniden oluştur
+                while (planets.length) {
+                    scene.remove(planets.pop());
+                }
+                
+                for (let i = 0; i < unlockedPlanets; i++) {
+                    if (i < planetData.length) {
+                        createPlanet(planetData[i]);
+                    }
+                }
+                
+                return true;
+            }
+            return false;
         }
 
         // Puan güncelleme
@@ -677,6 +746,7 @@
             }
             
             updateScore();
+            saveGameState(); // Oyun durumunu kaydet
         }
 
         // Klavye kontrolü
@@ -694,6 +764,7 @@
                 if (gameStarted && autoClicker > 0) {
                     score += autoClicker;
                     updateScore();
+                    saveGameState(); // Oyun durumunu kaydet
                 }
             }, 1000);
         }
@@ -724,6 +795,7 @@
                     clickSound.play();
                     animateClick(planet);
                     updateScore();
+                    saveGameState(); // Oyun durumunu kaydet
                 }
             };
 
@@ -748,6 +820,9 @@
         // Hoşgeldin ekranı
         function initWelcomeScreen() {
             const startGame = () => {
+                // Kaydedilmiş oyun durumunu yükle
+                const hasSavedGame = loadGameState();
+                
                 gsap.to(welcomeScreen, {
                     opacity: 0,
                     duration: 0.5,
@@ -755,7 +830,12 @@
                         welcomeScreen.style.display = 'none';
                         shopElement.classList.add('hidden');
                         gameStarted = true;
-                        showMessage('Oyun başladı! Gezegenlere tıkla! (Mağaza: M tuşu)', '#00FF00');
+                        
+                        if (hasSavedGame) {
+                            showMessage('Kaydedilmiş oyun yüklendi! Kaldığınız yerden devam edin.', '#00FF00');
+                        } else {
+                            showMessage('Oyun başladı! Gezegenlere tıkla! (Mağaza: M tuşu)', '#00FF00');
+                        }
                     }
                 });
             };
@@ -815,6 +895,11 @@
         closeShopBtn.addEventListener('touchend', (e) => {
             e.preventDefault();
             toggleShop();
+        });
+
+        // Sayfa kapanırken oyunu kaydet
+        window.addEventListener('beforeunload', () => {
+            saveGameState();
         });
     </script>
 </body>
