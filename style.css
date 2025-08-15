@@ -1,66 +1,110 @@
-// Oyun değişkenleri
-let score = 0;
-let clickPower = 1;
-let autoClicker = 0;
-let unlockedPlanets = 1;
-let gameStarted = false;
-const planets = [];
-
-// Güçlendirme fiyatları ve artışları
-const upgrades = {
-    click: { basePrice: 10, price: 10, increase: 1.5 },
-    auto: { basePrice: 25, price: 25, increase: 1.8 },
-    planet: { basePrice: 50, price: 50, increase: 1.0 }
-};
-
-// Mağaza butonlarını güncelle
-function updateShopButtons() {
-    document.getElementById('click-price').textContent = `${Math.floor(upgrades.click.price)} Puan`;
-    document.getElementById('auto-price').textContent = `${Math.floor(upgrades.auto.price)} Puan`;
-    document.getElementById('planet-price').textContent = `${Math.floor(upgrades.planet.price)} Puan`;
+:root {
+    --primary-color: #6e48aa;
+    --secondary-color: #9d50bb;
+    --accent-color: #4776E6;
 }
 
-// Satın alma fonksiyonu (güncellendi)
-function buyUpgrade(type) {
-    const upgrade = upgrades[type];
-    
-    if (score < upgrade.price) {
-        showMessage('Yeterli puan yok!', '#FF0000');
-        return;
-    }
-    
-    score -= upgrade.price;
-    buySound.currentTime = 0;
-    buySound.play();
-    
-    switch(type) {
-        case 'click':
-            clickPower++;
-            upgrade.price *= upgrade.increase; // Fiyatı artır
-            showMessage('Tıklama gücü arttı!', '#00FF00');
-            break;
-        case 'auto':
-            autoClicker++;
-            upgrade.price *= upgrade.increase; // Fiyatı artır
-            showMessage('Otomatik toplayıcı eklendi!', '#00FF00');
-            break;
-        case 'planet':
-            if (unlockedPlanets < planetData.length) {
-                unlockedPlanets++;
-                scene.remove(planets[0]);
-                planets.pop();
-                createPlanet(planetData[unlockedPlanets - 1]);
-                showMessage(`Yeni gezegen: ${planetData[unlockedPlanets - 1].name}`, '#00FF00');
-            } else {
-                showMessage('Tüm gezegenler açıldı!', '#FFFF00');
-            }
-            break;
-    }
-    
-    updateScore();
-    updateShopButtons(); // Mağazayı güncelle
-    saveGameState();
+* {
+    touch-action: manipulation;
 }
 
-// Oyun başlangıcında mağazayı güncelle
-updateShopButtons();
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: 'Arial', sans-serif;
+    background: #000;
+    color: white;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.hidden {
+    display: none !important;
+}
+
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#welcome-screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+#header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    z-index: 100;
+    background: rgba(0,0,0,0.7);
+}
+
+#score-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 5px;
+    flex-wrap: wrap;
+}
+
+#score {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #FFD700;
+}
+
+#stats {
+    display: flex;
+    gap: 10px;
+    font-size: 0.9rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#click-area {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* Mobil için özel ayarlar */
+@media (max-width: 768px) {
+    #header h1 {
+        font-size: 1.5rem;
+    }
+    
+    #score {
+        font-size: 1.5rem;
+    }
+    
+    #stats {
+        font-size: 0.8rem;
+        gap: 8px;
+    }
+    
+    .glow-button {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+    
+    #shop {
+        width: 90%;
+        padding: 15px;
+    }
+}
